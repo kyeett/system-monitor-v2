@@ -5,14 +5,14 @@ import importlib
 from flask import Flask, redirect, render_template, request, json
 import logging
 from collections import Counter, OrderedDict
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-VERSION = 0.3
+app.config['SECRET'] = "mysecret!"
+app.config['DEBUG'] = True
+socketio = SocketIO(app)
 
-
-@app.errorhandler(NotImplementedError)
-def handle_not_implemented(error):
-    return "The StateGetter plugin used has not implemented get_state() method", 500
+VERSION = 0.2
 
 
 @app.errorhandler(requests.RequestException)
@@ -20,28 +20,11 @@ def handle_invalid_usage(error):
     return error.message, 404
 
 
-@app.route('/state')
-def state():
-
-    current_state = state_getter.get_state()
-
-    response = json.dumps(current_state, sort_keys=True, indent=4, separators=(',', ': '))
-
-    # Check if ?refresh is specified for demo, used for demo purposes
-    if 'refresh' in request.args:
-        response = '<meta http-equiv="refresh" content="0.5">' + response.replace('\n', '<br>').replace(" ", "&nbsp;")
-
-    return response
-
-
 @app.route('/')
 def home():
-    return redirect("/ui", code=302)
-
-
-@app.route('/ui')
-def ui():
-    return render_template('index.html', options=options, sections=ui_sections, version=VERSION)
+    is_master = bool(request.args.get('master', ''))
+    print(is_master)
+    return render_template('index.html', options=options, sections=ui_sections, is_master=is_master, version=VERSION)
 
 
 # Add metadata to states that only has basic configuration
@@ -117,6 +100,16 @@ def load_getter_class(options):
     return getter_class
 
 
+@socketio.on('message')
+def handle_message(msg):
+    print(msg)
+
+@socketio.on('position master')
+def handle_position(msg):
+    print(msg)
+    emit('position broadcast', msg, broadcast=True)
+
+
 if __name__ == '__main__':
 
     # Read configuration from file
@@ -127,4 +120,4 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Nest possible_states
-    app.run(debug=True)
+    socketio.run(app)
