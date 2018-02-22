@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>System Monitor {{ version }}</title>
+	<meta name="author" content="Magnus Wahlstrand" />
+	<meta name="description" content="fullPage very simple demo." />
+	<meta name="keywords"  content="fullpage,jquery,demo,simple" />
+	<meta name="Resource-type" content="Document" />
+
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.fullPage.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='examples.css') }}" />
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+
+	<script type="text/javascript" src="{{ url_for('static', filename='vendors/scrolloverflow.js') }}"></script>
+
+	<script type="text/javascript" src="{{ url_for('static', filename='jquery.fullPage.js') }}"></script>
+	<script type="text/javascript">
+
+
+		// Change to page representing system state
+		// function changeState() {
+		// 	$.getJSON('http://localhost:{{ options.port if options.port else '5000'  }}/state')
+		// 	.success(function(response) {
+		// 		page = response.group;
+		// 		index = response.index;
+		// 		$.fn.fullpage.moveTo(page, index);
+		// 	})
+		// 	.error(function(jqXHR, textStatus, errorThrown) {
+
+		// 		// Handle the case when the local this local server is shut down for some reason
+		// 		if(jqXHR.status == 0) {
+		// 			errorMsg = "Local server is not responsponding. Please restart it"
+		// 		}
+		// 		else {
+		// 			errorMsg = jqXHR.status + ": " + jqXHR.responseText;
+		// 		}
+
+		// 		// Send error notification to the browser
+		// 		$.notify(errorMsg,
+		// 			{ position: "top center",
+		// 			  arrowSize: 30,
+		// 			  class: "error",
+		// 			 });
+		// 	});
+		// }
+
+		var globalSection = 1;
+		var globalIndex = 0;
+
+		$(document).ready(function() {
+
+
+			function printStuff() {
+				console.log("section:" + globalSection + ". index:" + globalIndex);
+			}
+
+			$('#fullpage').fullpage({
+				anchors: [{% for section in sections %}'{{ section.group }}',{% endfor %}],
+				sectionsColor: ['#f2f2f2', '#4BBFC3', '#7BAABE', 'whitesmoke', '#fff'],
+				menu: '#menu',
+				navigation:false,
+				css3: true,
+				afterLoad: function(anchorLink, index){
+
+					// Callback function to reset the position of a section after it has been left
+					var loadedSection = $(this);
+
+
+					// Select all slideContainers except this one
+					var currentSectionSlideContainer = $(loadedSection.find('.fp-slidesContainer'))[0]
+					$(".fp-slidesContainer").not(currentSectionSlideContainer).css('transform', 'translate3d(0px, 0px, 0px)');
+				},
+				onLeave: function(index, nextIndex, direction){
+					globalSection = nextIndex;
+					printStuff();
+					console.log(index, nextIndex, direction);
+				},
+
+				onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex){
+					globalIndex = nextSlideIndex;
+					printStuff();
+					console.log(anchorLink, index, slideIndex, direction, nextSlideIndex);
+				},
+				// afterLoad: function(anchorLink, index){
+				// 	console.log(anchorLink, index);
+				// },
+				// afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){
+				// 	console.log(anchorLink, index, slideAnchor, slideIndex);
+				// }
+
+			});
+		});
+	</script>
+
+</head>
+<body>
+
+<ul id="menu">
+	{% for section in sections %}
+		<li data-menuanchor="{{ section.group }}"><a href="#{{ section.group }}">{{ section.title }}</a></li>
+	{% endfor %}
+</ul>
+<div id="fullpage">
+
+	{% for section in sections %}
+		<div class="section" id="section{{ loop.index0 }}">
+			<h2>
+			{% for slide in section.slides %}
+			    <div class="slide"><h1>{{ slide.text }}</h1></div>
+			{% endfor%}
+		</div>
+	{% endfor %}
+</div>
+
+</body>
+</html>

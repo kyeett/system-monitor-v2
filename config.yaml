@@ -1,0 +1,16 @@
+options:
+  stateGetter: plugins.builtin_stategetters.AutomaticToggleGetter
+  updateFrequency: 1000
+  port: 5000
+states:
+- deploying:
+    text: Deploying, mfer'
+    title: Deploy
+    group: 'deploying'
+- deploying_completing:
+    group: 'deploying'
+- deploying_complete:
+    group: 'deploying'
+- testing
+- testing_complete
+- idle

@@ -11,4 +11,12 @@ An updated version of `system-monitor`. Uses socket.io instead jquery polling. T
 |-------------|-------------|-------------|-------------|
 |             |             |             |             |
 |             |             |             |             |
-|  1   | Initialize repo<br>Create README.md<br>Copy files from `system-monitor`<br>Simple 3 page system up<br>Release 0.1<br>Finish on time | ~~Initialize repo~~<br>~~Create README.md~~<br>Copy files from `system-monitor`<br>Simple 3 page system up<br>Release 0.1<br>Finish on time |  45 min  |
+|  1   | Initialize repo<br>Create README.md<br>Copy files from `system-monitor`<br>Simple 3 page system up<br>Release 0.1<br>Finish on time | ~~Initialize repo~~<br>~~Create README.md~~<br>~~Copy files from `system-monitor`~~<br>~~Simple 3 page system up~~<br>~~Release 0.1~~<br>~~Finish on time~~ |  45 min  |
+
+### Releases
+
+#### ~~0.1~~
+* Initialize repo
+* Create README.md
+* Copy files from `system-monitor`
+* Simple 3 page system up
