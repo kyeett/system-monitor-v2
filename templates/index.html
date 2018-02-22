@@ -9,6 +9,7 @@
 	<meta name="keywords"  content="fullpage,jquery,demo,simple" />
 	<meta name="Resource-type" content="Document" />
 
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='github.css') }}" />
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.fullPage.css') }}" />
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='examples.css') }}" />
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -17,6 +18,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+	<script type="text/javascript" src="  https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
 
 	<script type="text/javascript" src="{{ url_for('static', filename='vendors/scrolloverflow.js') }}"></script>
 
@@ -119,6 +121,22 @@
 				},
 
 			});
+			var converter = new showdown.Converter({tables: true, strikethrough: true, ghCodeBlocks: true, tasklists: true}),
+			text = '' +
+			'#hello, markdown!\n' +
+			'```print(hello)```\n' +
+			'* hello, markdown!\n' +
+			'* this is\n' +
+			'* a\n\n\n\n' +
+			 "- [x] checked list item\n" +
+ "- [ ] unchecked list item\n\n\n" +
+			"```html\n" +
+"test\n" +
+"```\n\n\n" +
+"| Tables        | Are           | Cool  |\n| ------------- |:-------------:| -----:|\n| **col 3 is**  | right-aligned | $1600 |\n| col 2 is      | *centered*    |   $12 |\n| zebra stripes | ~~are neat~~  |    $1 |\n\n" + "\n```html \n<p>Here's an idea: why don't we take <code>SuperiorProject</code> and turn it into <code>**Reasonable**Project</code>.</p> \n```";
+
+			html = converter.makeHtml(text);
+			$('extra').html('<div style="display: inline-block; margin: 0 auto; text-align: left">'+ html +'</div>');
 		});
 	</script>
 
@@ -136,11 +154,14 @@
 		<div class="section" id="section{{ loop.index0 }}">
 			<h2>
 			{% for slide in section.slides %}
-			    <div class="slide"><h1>{{ slide.text }}</h1></div>
+			    <div class="slide"><h1>{{ slide.text }}</h1>
+			    	<extra></extra>
+			    </div>
 			{% endfor%}
 		</div>
 	{% endfor %}
 </div>
+
 
 </body>
 </html>

@@ -231,6 +231,9 @@ p{
 	padding: 0 0 5px 0;
 }
 
+.fp-tableCell>div {
+	text-align: left;
+}
 
 
 /* Demos Menu
