@@ -6,11 +6,12 @@ states:
 - deploying:
     text: Deploying, mfer'
     title: Deploy
-    group: 'deploying'
+    section: 'deploying'
+    content: '<h1>My title here</h1>Some html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome Some html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome Some html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome Some html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html hereSome html here <br> :-D <br> More here'
 - deploying_completing:
-    group: 'deploying'
+    section: 'deploying'
 - deploying_complete:
-    group: 'deploying'
+    section: 'deploying'
 - testing
 - testing_complete
 - idle

@@ -10,10 +10,17 @@ An updated version of `system-monitor`. Uses socket.io instead jquery polling. T
 | Sprint #    | Target      | Completed   | Time (actual)  |
 |-------------|-------------|-------------|-------------|
 |             |             |             |             |
-|  3  | Break markdown into sections <br>Release 0.3 |             |             |
-|  ~  | ~ | Skunk worked on `Showdown`|     55  min     |
+|             |             |             |             |
+|  4 |  Break markdown into sections<br>Release 0.3 | ~~Break markdown into sections~~<br>~~Release 0.3~~ |    45 min (43)         |
+|  3  | Introduce live.js<br>Break markdown into sections<br>Add content from file<br>Generate config.yaml<br>Release 0.3 | ~~Introduce live.js~~<br>Break markdown into sections<br>~~Add content from config.yaml~~<br>Generate config.yaml<br>Release 0.3 |   45 min<br>(45)  |
+|  ~  | ~ | Skunk worked on `Showdown`|     (55 min)     |
 |  2  | Add socket.io prerequisites<br>Broadcast slide/index to other users<br>Master mode for clients<br>Follow broadcast<br>Release 0.2 | ~~Add socket.io prerequisites~~<br>~~Broadcast slide/index to other clients~~<br>~~Client follow master position~~<br>~~Release 0.2~~ |  45 min<br>(43) |
 |  1  | Initialize repo<br>Create README.md<br>Copy files from `system-monitor`<br>Simple 3 page system up<br>Release 0.1<br>Finish on time | ~~Initialize repo~~<br>~~Create README.md~~<br>~~Copy files from `system-monitor`~~<br>~~Simple 3 page system up~~<br>~~Release 0.1~~<br>~~Finish on time~~ |  45 min  |
+|             |             |             |             |
+|             |             |             |   **2h23 min**    |
+
+## TODOs
+* Handle pages without title as first line
 
 ## Ideas
 * List # users
@@ -28,7 +35,13 @@ An updated version of `system-monitor`. Uses socket.io instead jquery polling. T
 * Document formats: Markdown file
 * List of available document
 
+
+
 ## Releases
+
+#### ~~0.3~~
+* ~~Introduce live.js~~
+* ~~Lib to break down markdown files to html~~
 
 #### ~~0.2~~
 * Add socket.io prerequisites

@@ -6,6 +6,7 @@ from flask import Flask, redirect, render_template, request, json
 import logging
 from collections import Counter, OrderedDict
 from flask_socketio import SocketIO, emit
+from pprint import pprint
 
 app = Flask(__name__)
 app.config['SECRET'] = "mysecret!"
@@ -28,7 +29,7 @@ def home():
 
 
 # Add metadata to states that only has basic configuration
-def add_metadata(state_info, group_counter):
+def add_metadata(state_info, section_counter):
 
     metadata = {}
 
@@ -37,24 +38,21 @@ def add_metadata(state_info, group_counter):
         basename = state_info.keys()[0]
         default_text = basename.title().replace("_", " ")
 
-        metadata['basename'] = basename
-        metadata['title'] = state_info.values()[0].get('title', default_text)
-        metadata['text'] = state_info.values()[0].get('text', default_text)
+        metadata['title'] = state_info.values()[0].get('title', '')
+        metadata['content'] = state_info.values()[0].get('content', '<h1>' + default_text +'</h1>')
 
-        # Use group if specified, otherwise basename
-        group = state_info.values()[0].get('group', basename)
+        # Use section if specified, otherwise basename
+        section = state_info.values()[0].get('section', basename)
 
     else:
         basename = state_info
         default_text = basename.title().replace("_", " ")
-        metadata['basename'] = basename
-        metadata['title'] = default_text
-        metadata['text'] = default_text
-        group = basename
-
-    metadata['index'] = group_counter[group]
-    metadata['group'] = group
-    group_counter[group] += 1
+        metadata['content'] = '<h1>' + default_text + '</h1>'
+        section = basename
+    print(metadata)
+    metadata['index'] = section_counter[section]
+    metadata['section'] = section
+    section_counter[section] += 1
     return metadata
 
 
@@ -65,20 +63,21 @@ def read_configuration():
 
         options = configuration['options']
 
-        group_counter = Counter()
-        possible_states = [add_metadata(state, group_counter) for state in configuration['states']]
+        section_counter = Counter()
+        possible_states = [add_metadata(state, section_counter) for state in configuration['states']]
 
         ui_sections = []
-        # Get unique groups
-        for group in OrderedDict.fromkeys([state['group'] for state in possible_states]):
+        # Get unique sections
+        for section in OrderedDict.fromkeys([state['section'] for state in possible_states]):
 
             # Get slides in section
             ui_sections.append({
-                'group': group,
-                'title': group.title(),
-                'slides': [slide_metadata for slide_metadata in possible_states if slide_metadata['group'] == group]
+                'section': section,
+                'title': section.title(),
+                'slides': [slide_metadata for slide_metadata in possible_states if slide_metadata['section'] == section]
             })
 
+        pprint(ui_sections)
         # Verify mandatory fields exist in options
         if 'stateGetter' not in options:
             raise KeyError(""" Mandatory option 'stateGetter' missing in 'config.yaml'.
@@ -118,6 +117,9 @@ if __name__ == '__main__':
     except KeyError as e:
         logging.error(e)
         sys.exit(1)
+
+    import lib.parse_md as parse_md
+    ui_sections = parse_md.parse_markdown()
 
     # Nest possible_states
     socketio.run(app)

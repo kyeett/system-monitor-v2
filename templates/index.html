@@ -23,6 +23,7 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='vendors/scrolloverflow.js') }}"></script>
 
 	<script type="text/javascript" src="{{ url_for('static', filename='jquery.fullPage.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='live.js') }}"></script>
 
 
 	<script type="text/javascript">
@@ -33,7 +34,7 @@
 		// function changeState() {
 		// 	$.getJSON('http://localhost:{{ options.port if options.port else '5000'  }}/state')
 		// 	.success(function(response) {
-		// 		page = response.group;
+		// 		page = response.section;
 		// 		index = response.index;
 		// 		$.fn.fullpage.moveTo(page, index);
 		// 	})
@@ -96,7 +97,7 @@
 
 
 			$('#fullpage').fullpage({
-				anchors: [{% for section in sections %}'{{ section.group }}',{% endfor %}],
+				anchors: [{% for section in sections %}'{{ section.section }}',{% endfor %}],
 				sectionsColor: ['#f2f2f2', '#4BBFC3', '#7BAABE', 'whitesmoke', '#fff'],
 				menu: '#menu',
 				navigation:false,
@@ -122,18 +123,18 @@
 
 			});
 			var converter = new showdown.Converter({tables: true, strikethrough: true, ghCodeBlocks: true, tasklists: true}),
-			text = '' +
-			'#hello, markdown!\n' +
-			'```print(hello)```\n' +
-			'* hello, markdown!\n' +
-			'* this is\n' +
-			'* a\n\n\n\n' +
-			 "- [x] checked list item\n" +
- "- [ ] unchecked list item\n\n\n" +
-			"```html\n" +
-"test\n" +
-"```\n\n\n" +
-"| Tables        | Are           | Cool  |\n| ------------- |:-------------:| -----:|\n| **col 3 is**  | right-aligned | $1600 |\n| col 2 is      | *centered*    |   $12 |\n| zebra stripes | ~~are neat~~  |    $1 |\n\n" + "\n```html \n<p>Here's an idea: why don't we take <code>SuperiorProject</code> and turn it into <code>**Reasonable**Project</code>.</p> \n```";
+			text = '';
+// 			'#hello, markdown!\n' +
+// 			'```print(hello)```\n' +
+// 			'* hello, markdown!\n' +
+// 			'* this is\n' +
+// 			'* a\n\n\n\n' +
+// 			 "- [x] checked list item\n" +
+//  "- [ ] unchecked list item\n\n\n" +
+// 			"```html\n" +
+// "test\n" +
+// "```\n\n\n" +
+// "| Tables        | Are           | Cool  |\n| ------------- |:-------------:| -----:|\n| **col 3 is**  | right-aligned | $1600 |\n| col 2 is      | *centered*    |   $12 |\n| zebra stripes | ~~are neat~~  |    $1 |\n\n" + "\n```html \n<p>Here's an idea: why don't we take <code>SuperiorProject</code> and turn it into <code>**Reasonable**Project</code>.</p> \n```";*/
 
 			html = converter.makeHtml(text);
 			$('extra').html('<div style="display: inline-block; margin: 0 auto; text-align: left">'+ html +'</div>');
@@ -145,7 +146,7 @@
 
 <ul id="menu">
 	{% for section in sections %}
-		<li data-menuanchor="{{ section.group }}"><a href="#{{ section.group }}">{{ section.title }}</a></li>
+		<li data-menuanchor="{{ section.section }}"><a href="#{{ section.section }}">{{ section.title }}</a></li>
 	{% endfor %}
 </ul>
 <div id="fullpage">
@@ -154,8 +155,13 @@
 		<div class="section" id="section{{ loop.index0 }}">
 			<h2>
 			{% for slide in section.slides %}
-			    <div class="slide"><h1>{{ slide.text }}</h1>
-			    	<extra></extra>
+			    <div class="slide">
+			    	<div style="border: 1px solid black; display: inline-block; text-align: left">
+
+			    	{{ slide.content|safe }}
+
+
+			    	</div>
 			    </div>
 			{% endfor%}
 		</div>
