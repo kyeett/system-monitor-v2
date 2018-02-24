@@ -18,7 +18,8 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-	<script type="text/javascript" src="  https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/showdown-prettify@1.3.0/dist/showdown-prettify.min.js"></script>
 
 	<script type="text/javascript" src="{{ url_for('static', filename='vendors/scrolloverflow.js') }}"></script>
 
@@ -122,22 +123,18 @@
 				},
 
 			});
-			var converter = new showdown.Converter({tables: true, strikethrough: true, ghCodeBlocks: true, tasklists: true}),
-			text = '';
-// 			'#hello, markdown!\n' +
-// 			'```print(hello)```\n' +
-// 			'* hello, markdown!\n' +
-// 			'* this is\n' +
-// 			'* a\n\n\n\n' +
-// 			 "- [x] checked list item\n" +
-//  "- [ ] unchecked list item\n\n\n" +
-// 			"```html\n" +
-// "test\n" +
-// "```\n\n\n" +
-// "| Tables        | Are           | Cool  |\n| ------------- |:-------------:| -----:|\n| **col 3 is**  | right-aligned | $1600 |\n| col 2 is      | *centered*    |   $12 |\n| zebra stripes | ~~are neat~~  |    $1 |\n\n" + "\n```html \n<p>Here's an idea: why don't we take <code>SuperiorProject</code> and turn it into <code>**Reasonable**Project</code>.</p> \n```";*/
 
-			html = converter.makeHtml(text);
-			$('extra').html('<div style="display: inline-block; margin: 0 auto; text-align: left">'+ html +'</div>');
+			// Convert markdown to html
+			var converter = new showdown.Converter({tables: true, strikethrough: true, ghCodeBlocks: true, tasklists: true, extensions: ['prettify']});
+			$("div.markdown").each(function() {
+				console.log($(this).text());
+				console.log(converter.makeHtml( $(this).text())) ;
+				$(this).html(
+						converter.makeHtml($(this).text())
+					);
+
+			});
+
 		});
 	</script>
 
@@ -153,15 +150,9 @@
 
 	{% for section in sections %}
 		<div class="section" id="section{{ loop.index0 }}">
-			<h2>
 			{% for slide in section.slides %}
 			    <div class="slide">
-			    	<div style="border: 1px solid black; display: inline-block; text-align: left">
-
-			    	{{ slide.content|safe }}
-
-
-			    	</div>
+			    	<div class="markdown" style="background-color: white; padding: 20px; display: inline-block; text-align: left">{{ slide.content|safe }}</div>
 			    </div>
 			{% endfor%}
 		</div>
